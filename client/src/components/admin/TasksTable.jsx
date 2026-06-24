@@ -41,6 +41,18 @@ const STATUS_CLASS = {
   Rejected:  'status-badge-Rejected',
 };
 
+/* ── Due date urgency helper ── */
+const getDueBadge = (dueDate) => {
+  if (!dueDate) return null;
+  const due = new Date(dueDate);
+  if (isNaN(due)) return null;
+
+  const hoursLeft = (due - new Date()) / (1000 * 60 * 60);
+  if (hoursLeft < 0) return { label: 'Overdue', cls: 'badge-overdue' };
+  if (hoursLeft <= 24) return { label: 'Due Soon', cls: 'badge-due-soon' };
+  return null;
+};
+
 const TasksTable = ({ tasks, onEdit, onRefresh }) => {
 
   const handleDelete = async (id) => {
@@ -127,7 +139,17 @@ const TasksTable = ({ tasks, onEdit, onRefresh }) => {
 
               {/* Due date */}
               <td className="table-td" style={{ color: '#6B7280', whiteSpace: 'nowrap' }}>
-                {fmtDate(task.dueDate)}
+                <span className="flex items-center gap-2">
+                  {fmtDate(task.dueDate)}
+                  {(() => {
+                    const badge = getDueBadge(task.dueDate);
+                    return badge ? (
+                      <span className={`inline-block px-2 py-[2px] rounded-full text-[10px] font-semibold ${badge.cls}`}>
+                        {badge.label}
+                      </span>
+                    ) : null;
+                  })()}
+                </span>
               </td>
 
               {/* Created */}

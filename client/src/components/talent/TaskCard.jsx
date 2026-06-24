@@ -1,4 +1,4 @@
-﻿import { claimTask } from '../../api/talent';
+import { claimTask } from '../../api/talent';
 
 const STATUS_CLASS = {
   Open:      'status-badge-Open',
@@ -18,6 +18,21 @@ const TaskCard = ({ task, showClaimButton = false, onClaimed }) => {
       alert(err.response?.data?.message || 'Failed to claim task');
     }
   };
+
+  // figure out if the task is overdue or due soon
+  const getDueBadge = () => {
+    if (!task.dueDate) return null;
+    const now = new Date();
+    const due = new Date(task.dueDate);
+    if (isNaN(due)) return null;
+
+    const hoursLeft = (due - now) / (1000 * 60 * 60);
+    if (hoursLeft < 0) return { label: 'Overdue', cls: 'badge-overdue' };
+    if (hoursLeft <= 24) return { label: 'Due Soon', cls: 'badge-due-soon' };
+    return null;
+  };
+
+  const dueBadge = getDueBadge();
 
   return (
     <div className="bg-bg-card border border-border rounded-xl p-5 flex flex-col gap-3 hover:border-border-light hover:-translate-y-0.5 transition-all cursor-default">
@@ -40,8 +55,13 @@ const TaskCard = ({ task, showClaimButton = false, onClaimed }) => {
       {/* Meta row */}
       <div className="flex items-center justify-between flex-wrap gap-2 mt-auto">
         
-        <span className="text-[12px] text-text-faint">
+        <span className="text-[12px] text-text-faint flex items-center gap-2">
           {task.dueDate ? `Due: ${task.dueDate}` : 'No due date'}
+          {dueBadge && (
+            <span className={`inline-block px-2 py-[2px] rounded-full text-[10px] font-semibold ${dueBadge.cls}`}>
+              {dueBadge.label}
+            </span>
+          )}
         </span>
         {task.createdBy?.name && (
           <span className="text-[12px] text-text-faint">By {task.createdBy.name}</span>
