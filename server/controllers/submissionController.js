@@ -1,4 +1,4 @@
-﻿const Submission = require('../models/Submission');
+const Submission = require('../models/Submission');
 const Task = require('../models/Task');
 
 // @desc  Submit a task with a file upload
@@ -53,6 +53,12 @@ const getSubmission = async (req, res) => {
 
     if (!submission) {
       return res.status(404).json({ message: 'No submission found for this task' });
+    }
+
+    // talents can only view their own submissions
+    if (req.user.role === 'Talent' &&
+        submission.talentId._id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Access denied' });
     }
 
     res.json(submission);
