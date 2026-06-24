@@ -1,4 +1,4 @@
-﻿const Task = require('../models/Task');
+const Task = require('../models/Task');
 
 // @desc  Get all tasks
 // @route GET /api/tasks
@@ -39,6 +39,14 @@ const getTaskById = async (req, res) => {
 // @access Admin
 const createTask = async (req, res) => {
   const { title, description, status, assignedTo, dueDate } = req.body;
+
+  // reject empty or whitespace-only payloads
+  if (!title || !title.trim()) {
+    return res.status(400).json({ message: 'Title is required' });
+  }
+  if (!description || !description.trim()) {
+    return res.status(400).json({ message: 'Description is required' });
+  }
 
   try {
     const task = await Task.create({
