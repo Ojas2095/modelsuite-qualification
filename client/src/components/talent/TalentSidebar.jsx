@@ -54,7 +54,7 @@ const TalentSidebar = () => {
         </p>
 
         {navItems.map(({ label, path, Icon }) => {
-          const isActive = location.pathname === path;
+          const isActive = location.pathname.startsWith(path);
           return (
             <button key={path}
               onClick={() => navigate(path)}
