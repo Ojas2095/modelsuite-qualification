@@ -1,0 +1,12 @@
+Hey team! This PR addresses the 5 assigned qualification tasks. 
+
+I've fixed the backend vulnerabilities by adding payload validation on task creation and strict ownership checks for the IDOR issue in the submission API. On the frontend, I added the missing loading states to prevent double-submissions, fixed the active state logic in the sidebars so nested routes highlight correctly, and added the 'Due Soon/Overdue' badges based on the 24-hour threshold. 
+
+Everything builds cleanly and has been tested locally. Let me know if you need any adjustments!
+
+**Issues Closed:**
+Closes #9
+Closes #7
+Closes #14
+Closes #28
+Closes #16

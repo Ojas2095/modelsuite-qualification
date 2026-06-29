@@ -1,0 +1,34 @@
+What was done:
+- Fixed Issue #9: Added payload validation for task creation to reject empty strings.
+- Fixed Issue #7: Patched IDOR vulnerability in the submission API by verifying the talentId matches the requester.
+- Fixed Issue #14: Added Due Soon and Overdue badges to tasks based on a 24-hour threshold.
+- Fixed Issue #28: Fixed active state indicators for nested routes in the sidebar.
+- Fixed Issue #16: Added loading indicators and disabled states to prevent double submissions.
+- Fixed all pre-existing ESLint warnings to comply with the zero-warning policy.
+
+How it was tested:
+- Local Testing: Ran both the client and server locally.
+- Verified task creation fails gracefully on empty input.
+- Verified IDOR patch by attempting to fetch another user's submission (returns 403).
+- Verified sidebar highlighting persists on nested routes.
+- Ran `npm run lint` locally on both client and server to verify 0 warnings.
+- Ran `npm run build` locally on the client to ensure it builds successfully.
+
+Screenshots:
+![Dashboard Overdue Badges](https://github.com/modelsuite-ai/modelsuite-qualification/assets/dashboard.png)
+![Task Edit Loading State](https://github.com/modelsuite-ai/modelsuite-qualification/assets/loading.png)
+
+Files changed:
+- `client/src/components/admin/TasksTable.jsx`
+- `client/src/components/talent/TaskCard.jsx`
+- `server/controllers/taskController.js`
+- `server/controllers/submissionController.js`
+- `client/src/components/admin/Sidebar.jsx`
+- `client/src/components/talent/TalentSidebar.jsx`
+- ESLint config fixes across the codebase
+
+Testing notes:
+To run locally:
+1. `cd server && npm install && npm run seed && npm run dev`
+2. `cd client && npm install && npm run dev`
+3. Login as admin or talent to test the UI changes.
